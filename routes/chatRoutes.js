@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: "Message cannot be empty." });
         }
 
-        const apiResponse = await fetch('http://localhost:8000/ask', {
+        const apiResponse = await fetch('http://127.0.0.1:8000/ask', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message }),

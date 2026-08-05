@@ -49,7 +49,7 @@ vector_db = Chroma(persist_directory=CHROMA_DB_DIR, embedding_function=embedding
 retriever = vector_db.as_retriever(search_kwargs={"k": 3})
 
 print("Setting up Gemini LLM...")
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.2)
+llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash", temperature=0.2)
 
 system_prompt = (
     "You are an intelligent, helpful AI assistant for the college internship portal.\n"
