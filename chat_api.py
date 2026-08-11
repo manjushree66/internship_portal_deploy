@@ -46,24 +46,48 @@ embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 print("Loading ChromaDB...")
 vector_db = Chroma(persist_directory=CHROMA_DB_DIR, embedding_function=embedding_model)
-retriever = vector_db.as_retriever(search_kwargs={"k": 3})
-
+retriever = vector_db.as_retriever(
+    search_type="mmr",
+    search_kwargs={
+        "k": 5,
+        "fetch_k": 10
+    }
+)
 print("Setting up Gemini LLM...")
 llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash", temperature=0.2)
 
 system_prompt = (
-    "You are an intelligent, helpful AI assistant for the college internship portal.\n"
-    "Use the following pieces of retrieved context from the official guidelines and the live "
-    "updates to answer the student's question.\n"
-    "Be a little flexible with vocabulary like incase of typos or misspellings, try to "
-    "understand their true intent based on context.\n"
-    "CRITICAL: If the live update text contradicts the official PDF guidelines (like changes "
-    "in dates or team members), ALWAYS prioritize the LIVE UPDATES.\n\n"
-    "[LIVE UPDATES FROM SHEET]:\n{live_sheet_data}\n\n"
-    "[OFFICIAL GUIDELINES CONTEXT]:\n{context}\n\n"
-    "If you do not know the answer based on both sources, say "
-    "'I am sorry, I cannot find that information in the official guidelines.' Do not make up "
-    "facts. If required you can say meet the internship coordinator for more information."
+    "You are an intelligent, friendly AI assistant for the PES University Internship Management Portal.\n\n"
+
+    "Answer student questions using the provided context.\n"
+    "The retrieved context may include:\n"
+    "1. Official internship guidelines (PDF).\n"
+    "2. Portal knowledge (workflows, roles, permissions, status flow, credits, report upload, etc.).\n"
+    "3. Live updates from the Google Sheet.\n\n"
+
+    "Priority of information:\n"
+    "1. Live Google Sheet updates (highest priority).\n"
+    "2. Portal knowledge.\n"
+    "3. Official internship guidelines.\n\n"
+
+    "If there is conflicting information, always follow the higher-priority source.\n\n"
+
+    "Understand minor spelling mistakes, abbreviations, and typing errors. Infer the student's intended meaning whenever it is reasonably clear.\n\n"
+
+    "Response Guidelines:\n"
+    "- Answer simple factual questions in 1–2 sentences.\n"
+    "- Give detailed explanations only if the student explicitly asks for them.\n"
+    "- Be clear, concise, and professional.\n"
+    "- Do not mention where the answer came from unless the student specifically asks.\n"
+    "- Do not invent information.\n"
+    "- If the answer is not available in any provided context, say:\n"
+    "'I'm sorry, I couldn't find that information in the internship guidelines or portal knowledge. Please contact the internship coordinator for further assistance if needed.'\n\n"
+
+    "[LIVE UPDATES]\n"
+    "{live_sheet_data}\n\n"
+
+    "[RETRIEVED CONTEXT]\n"
+    "{context}"
 )
 prompt = ChatPromptTemplate.from_messages([
     ("system", system_prompt),
@@ -87,6 +111,20 @@ def ask(req: ChatRequest):
 
     # Fetched fresh on every request, since this data changes independently of the PDF
     live_updates = fetch_live_sheet_data(GOOGLE_SHEET_CSV_URL)
+    
+    # -----------------------------
+    # DEBUG: See what Retriever finds
+    # -----------------------------
+    retrieved_docs = retriever.invoke(req.message)
+
+    print("\n================ RETRIEVED CHUNKS ================\n")
+
+    for i, doc in enumerate(retrieved_docs):
+        print(f"\n----- Chunk {i+1} -----")
+        print(doc.page_content)
+        print("--------------------------------")
+
+    print("\n=================================================\n")
 
     response = rag_chain.invoke({
         "input": req.message,
