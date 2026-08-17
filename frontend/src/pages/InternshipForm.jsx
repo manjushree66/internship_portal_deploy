@@ -32,7 +32,7 @@ export default function InternshipForm() {
     company: "",
     companyWebsite: "", // <-- ADDED: Company Website
     role: "",
-
+    managerLinkedIn: "",
     managerName: "",
     managerEmail: "",
 
@@ -143,6 +143,7 @@ export default function InternshipForm() {
         company: "",
         companyWebsite: "", // <-- ADDED
         role: "",
+        managerLinkedIn: "",
         managerName: "",
         managerEmail: "",
         mentorName: "",
@@ -328,6 +329,14 @@ export default function InternshipForm() {
               onChange={handleChange}
               className="border rounded-lg p-3"
             />
+            <input
+             type="url"
+            name="managerLinkedIn"
+            placeholder="Manager LinkedIn Profile (https://linkedin.com/in/...)"
+             value={form.managerLinkedIn}
+            onChange={handleChange}
+            className="border rounded-lg p-3 md:col-span-2"
+           />
             
           </div>
         )}
