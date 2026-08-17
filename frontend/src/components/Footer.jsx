@@ -27,17 +27,7 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Quick Links */}
-        <div className="footer-section">
-          <h3>Quick Links</h3>
-
-          <ul>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/internship-form">Apply Internship</a></li>
-            <li><a href="/status">Track Status</a></li>
-            <li><a href="/chatbot">AI Assistant</a></li>
-          </ul>
-        </div>
+  
 
         {/* Contact */}
         <div className="footer-section">
@@ -64,9 +54,6 @@ const Footer = () => {
           <h3>Connect</h3>
 
           <div className="social-icons">
-            <a href="#">
-              <FaGithub />
-            </a>
 
             <a href="#">
               <FaLinkedin />
