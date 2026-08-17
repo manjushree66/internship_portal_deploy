@@ -224,6 +224,67 @@ const response = await fetch(
           </div>
         </div>
       </div>
+            {/* Internship Report Section */}
+<diiv className="mt-12 bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+  <div className="flex items-start gap-4">
+
+    {/* Icon */}
+    <div className="bg-blue-100 text-blue-700 rounded-xl p-3 text-2xl">
+      📄
+    </div>
+
+    <div className="flex-1">
+
+      <h3 className="text-2xl font-bold text-gray-900">
+        Internship Report
+      </h3>
+
+      <p className="text-gray-600 mt-3 leading-relaxed">
+        As part of the internship completion procedure, students are required
+        to upload their Internship Report upon completion of the internship.
+      </p>
+
+      <p className="text-gray-600 mt-2 leading-relaxed">
+        The report format and submission link will be communicated via email.
+      </p>
+
+      {/* Report Format */}
+      <div className="mt-5 bg-blue-50 border border-blue-200 rounded-xl p-5">
+
+        <h4 className="font-semibold text-blue-900 text-lg">
+          📑 Internship Report Format
+        </h4>
+
+        <p className="text-sm text-blue-800 mt-2">
+          Access the official internship report format using the link below.
+        </p>
+
+        <a
+          href="https://drive.google.com/drive/folders/1xzZz-lnhVzchHb_NZSyiD-IV5g6tmgGf?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center mt-4 bg-blue-700 hover:bg-blue-800 text-white px-5 py-2.5 rounded-lg font-semibold transition-colors"
+        >
+          📂 View Report Format
+        </a>
+
+      </div>
+
+      {/* Submission Information */}
+      <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+
+        <p className="text-sm text-yellow-900">
+          <strong>⚠️ Submission:</strong> The internship report submission
+          link will be shared with students via their registered email.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
     </>
   );
 }
