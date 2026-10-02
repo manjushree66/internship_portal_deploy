@@ -1,3 +1,4 @@
+import os
 from db_verifier import (
     load_students,
     verify_student_company
@@ -9,8 +10,10 @@ from company_verifier import (
 )
 
 
-STUDENT_FILE = "data/students.json"
-COMPANY_FILE = "data/companies.xlsx"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+STUDENT_FILE = os.path.join(BASE_DIR, "data", "students.json")
+COMPANY_FILE = os.path.join(BASE_DIR, "data", "companies.xlsx")
 
 
 # -----------------------------

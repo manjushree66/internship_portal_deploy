@@ -225,7 +225,7 @@ const response = await fetch(
         </div>
       </div>
             {/* Internship Report Section */}
-<diiv className="mt-12 bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+<div className="mt-12 bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
   <div className="flex items-start gap-4">
 
     {/* Icon */}

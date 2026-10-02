@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
+import re
 
 def scrape_website(url):
     try:
@@ -30,14 +30,26 @@ def scrape_website(url):
         title = soup.title.string.strip() if soup.title and soup.title.string else ""
 
         text = soup.get_text(" ", strip=True)
+        # Extract email addresses
+        emails = re.findall(
+            r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}",
+            text
+        )
 
+        # Extract phone numbers
+        phone_numbers = re.findall(
+            r"(?:\+91[\s-]?)?[6-9]\d{9}",
+            text
+        )
         return {
-            "success": True,
-            "status_code": response.status_code,
-            "original_url": url,
-            "final_url": response.url,
-            "title": title,
-            "text": text[:5000]
+        "success": True,
+        "status_code": response.status_code,
+        "original_url": url,
+        "final_url": response.url,
+        "title": title,
+        "text": text[:5000],
+        "emails": emails,
+        "phone_numbers": phone_numbers
         }
 
     except requests.RequestException as e:
@@ -45,3 +57,8 @@ def scrape_website(url):
             "success": False,
             "error": str(e)
         }
+if __name__ == "__main__":
+
+    result = scrape_website("https://example.com")
+
+    print(result)

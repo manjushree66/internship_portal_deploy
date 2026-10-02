@@ -1,6 +1,7 @@
 # 1. IMPORTS — always at the top
 
 from company_resolver import create_company_record
+from ssl_checker import check_https_ssl
 from scraper import scrape_website
 from verifier import (
     check_company_name,
@@ -90,6 +91,10 @@ if result["success"]:
 
     print("Domain creation date:", creation_date)
     print("Domain age (days):", age_days)
+    ssl_result = check_https_ssl(company["company_website"])
+
+    print("HTTPS enabled:", ssl_result["https_enabled"])
+    print("SSL valid:", ssl_result["ssl_valid"])
     web_result = create_web_verification_result(
         website_accessible=True,
         original_domain=redirect_check["original_domain"],
