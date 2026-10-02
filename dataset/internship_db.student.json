@@ -1,0 +1,165 @@
+[{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c18"
+  },
+  "srn": "PES1UG24CS001",
+  "student_name": "Aarav Sharma",
+  "student_email": "your_email+student1@gmail.com",
+  "semester": "8",
+  "cgpa": 9.12,
+  "password": "stu001"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c19"
+  },
+  "srn": "PES1UG24CS002",
+  "student_name": "Diya Patel",
+  "student_email": "your_email+student2@gmail.com",
+  "semester": "8",
+  "cgpa": 8.54,
+  "password": "stu002"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c1a"
+  },
+  "srn": "PES1UG24CS003",
+  "student_name": "Rohan Iyer",
+  "student_email": "your_email+student3@gmail.com",
+  "semester": "8",
+  "cgpa": 7.89,
+  "password": "stu003"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c1b"
+  },
+  "srn": "PES1UG24CS004",
+  "student_name": "Sneha Reddy",
+  "student_email": "your_email+student4@gmail.com",
+  "semester": "8",
+  "cgpa": 8.81,
+  "password": "stu004"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c1c"
+  },
+  "srn": "PES1UG24CS005",
+  "student_name": "Vikram Malhotra",
+  "student_email": "your_email+student5@gmail.com",
+  "semester": "8",
+  "cgpa": 6.95,
+  "password": "stu005"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c1d"
+  },
+  "srn": "PES1UG24CS006",
+  "student_name": "Ananya Rao",
+  "student_email": "your_email+student6@gmail.com",
+  "semester": "8",
+  "cgpa": 9.43,
+  "password": "stu006"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c1e"
+  },
+  "srn": "PES1UG24CS007",
+  "student_name": "Kabir Mehta",
+  "student_email": "your_email+student7@gmail.com",
+  "semester": "8",
+  "cgpa": 8.1,
+  "password": "stu007"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c1f"
+  },
+  "srn": "PES1UG24CS008",
+  "student_name": "Isha Deshmukh",
+  "student_email": "your_email+student8@gmail.com",
+  "semester": "8",
+  "cgpa": 7.32,
+  "password": "stu008"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c20"
+  },
+  "srn": "PES1UG24CS009",
+  "student_name": "Arjun Nair",
+  "student_email": "your_email+student9@gmail.com",
+  "semester": "8",
+  "cgpa": 8.95,
+  "password": "stu009"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c21"
+  },
+  "srn": "PES1UG24CS010",
+  "student_name": "Meera Joshi",
+  "student_email": "your_email+student10@gmail.com",
+  "semester": "8",
+  "cgpa": 8.22,
+  "password": "stu010"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c22"
+  },
+  "srn": "PES1UG24CS011",
+  "student_name": "Aditya Verma",
+  "student_email": "your_email+student11@gmail.com",
+  "semester": "8",
+  "cgpa": 7.65,
+  "password": "stu011"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c23"
+  },
+  "srn": "PES1UG24CS012",
+  "student_name": "Riya Kapoor",
+  "student_email": "your_email+student12@gmail.com",
+  "semester": "8",
+  "cgpa": 9.01,
+  "password": "stu012"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c24"
+  },
+  "srn": "PES1UG25CS088",
+  "student_name": "Rahul Kumar",
+  "student_email": "your_email+student13@gmail.com",
+  "semester": "8",
+  "cgpa": 8.4,
+  "password": "stu013"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c25"
+  },
+  "srn": "PES1UG25CS092",
+  "student_name": "Pooja Hegde",
+  "student_email": "your_email+student14@gmail.com",
+  "semester": "8",
+  "cgpa": 7.92,
+  "password": "stu014"
+},
+{
+  "_id": {
+    "$oid": "6a4df65785d9a86307890c26"
+  },
+  "srn": "PES1UG26CS101",
+  "student_name": "Siddharth Das",
+  "student_email": "your_email+student15@gmail.com",
+  "semester": "8",
+  "cgpa": 8.15,
+  "password": "stu015"
+}]
