@@ -4,12 +4,35 @@ const router = express.Router();
 
 const facultyController = require("../controllers/facultyController");
 
-router.get("/applications", facultyController.viewApplications);
+const { verifyToken } = require("../middleware/authMiddleware");
+const { requireRole } = require("../middleware/roleMiddleware");
 
-router.put("/approve/:id", facultyController.approveApplication);
+router.get(
+    "/applications",
+    verifyToken,
+    requireRole("Faculty"),
+    facultyController.viewApplications
+);
 
-router.put("/reject/:id", facultyController.rejectApplication);
+router.put(
+    "/approve/:id",
+    verifyToken,
+    requireRole("Faculty"),
+    facultyController.approveApplication
+);
 
-router.post("/grade", facultyController.assignGrade);
+router.put(
+    "/reject/:id",
+    verifyToken,
+    requireRole("Faculty"),
+    facultyController.rejectApplication
+);
+
+router.post(
+    "/grade",
+    verifyToken,
+    requireRole("Faculty"),
+    facultyController.assignGrade
+);
 
 module.exports = router;

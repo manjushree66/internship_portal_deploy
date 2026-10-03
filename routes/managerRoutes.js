@@ -4,32 +4,28 @@ const router = express.Router();
 
 const managerController = require("../controllers/managerController");
 
+const { verifyToken } = require("../middleware/authMiddleware");
+const { requireRole } = require("../middleware/roleMiddleware");
 
-// =======================================
-// View Students
-// =======================================
 router.get(
     "/students",
+    verifyToken,
+    requireRole("Manager"),
     managerController.viewStudents
 );
 
-
-// =======================================
-// Company / College Decision
-// =======================================
 router.put(
     "/evaluation-mode/:id",
+    verifyToken,
+    requireRole("Manager"),
     managerController.setEvaluationMode
 );
 
-
-// =======================================
-// Submit Evaluation
-// =======================================
 router.post(
     "/evaluate",
+    verifyToken,
+    requireRole("Manager"),
     managerController.submitEvaluation
 );
-
 
 module.exports = router;

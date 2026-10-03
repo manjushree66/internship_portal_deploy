@@ -8,7 +8,9 @@ const Student = require("../models/Student");
 exports.viewApplications = async (req, res) => {
     try {
 
-        const internships = await Internship.find().sort({ createdAt: -1 });
+        const internships = await Internship.find({
+           assigned_faculty: req.user.identifier
+           }).sort({ createdAt: -1 });
 
         const applications = await Promise.all(
             internships.map(async (internship) => {
@@ -109,8 +111,8 @@ exports.approveApplication = async (req, res) => {
         }
 
         internship.status = "Approved";
-
-        internship.current_stage = "Faculty Approval";
+        internship.current_stage = "Manager Evaluation";
+        internship.assigned_faculty = req.user.identifier;
 
         await internship.save();
 
@@ -161,9 +163,9 @@ exports.rejectApplication = async (req, res) => {
         }
 
         internship.status = "Rejected";
-
+        internship.current_stage = "Faculty Approval";
         internship.faculty_remarks = req.body.reason;
-
+        internship.assigned_faculty = req.user.identifier;
         await internship.save();
 
         res.json({
@@ -201,7 +203,7 @@ exports.assignGrade = async (req, res) => {
         const {
 
             id,
-
+            grade,
             credits
 
         } = req.body;
@@ -219,13 +221,12 @@ exports.assignGrade = async (req, res) => {
             });
 
         }
-
+        internship.grade = grade;
         internship.credits = credits;
 
         internship.status = "Completed";
-
         internship.current_stage = "Completed";
-
+        internship.grade_released = false;
         await internship.save();
 
         res.json({

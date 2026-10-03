@@ -16,7 +16,6 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const managerRoutes = require("./routes/managerRoutes");
-const applicationRoutes = require("./routes/applications");
 
 // ============================================================
 // CREATE EXPRESS APP
@@ -38,9 +37,11 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use(express.urlencoded({
-    extended: true
-}));
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+);
 
 // ============================================================
 // STATIC UPLOADS
@@ -92,21 +93,12 @@ app.use(
     managerRoutes
 );
 
-app.use(
-    "/api/applications",
-    applicationRoutes
-);
-
 // ============================================================
 // DEFAULT ROUTE
 // ============================================================
 
 app.get("/", (req, res) => {
-
-    res.send(
-        "Internship Management Backend Running!"
-    );
-
+    res.send("Internship Management Backend Running!");
 });
 
 // ============================================================
@@ -114,76 +106,49 @@ app.get("/", (req, res) => {
 // ============================================================
 
 app.use((err, req, res, next) => {
-
     console.error("Server Error:", err);
 
     // Multer file upload error
     if (err.name === "MulterError") {
 
         if (err.code === "LIMIT_FILE_SIZE") {
-
             return res.status(400).json({
-
                 success: false,
-
-                message:
-                    "File size must be less than 10 MB."
-
+                message: "File size must be less than 10 MB."
             });
-
         }
 
         return res.status(400).json({
-
             success: false,
-
             message: err.message
-
         });
-
     }
 
     // PDF validation error
     if (
         err.message &&
-        err.message.includes(
-            "Only PDF files are allowed"
-        )
+        err.message.includes("Only PDF files are allowed")
     ) {
-
         return res.status(400).json({
-
             success: false,
-
-            message:
-                "Only PDF files are allowed."
-
+            message: "Only PDF files are allowed."
         });
-
     }
 
     res.status(500).json({
-
         success: false,
-
-        message:
-            "Internal server error."
-
+        message: "Internal server error."
     });
-
 });
 
 // ============================================================
 // START SERVER
 // ============================================================
 
-const PORT =
-    process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-
     console.log(
         `Server running on http://localhost:${PORT}`
     );
-
 });

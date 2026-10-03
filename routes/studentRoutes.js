@@ -1,8 +1,10 @@
-const { verifyToken } = require("../middleware/authMiddleware");
-const upload = require("../middleware/upload");
 const express = require("express");
 
 const router = express.Router();
+
+const { verifyToken } = require("../middleware/authMiddleware");
+const { requireRole } = require("../middleware/roleMiddleware");
+const upload = require("../middleware/upload");
 
 const studentController = require("../controllers/studentController");
 
@@ -14,14 +16,21 @@ const studentController = require("../controllers/studentController");
 router.post(
     "/register",
     verifyToken,
+    requireRole("Student"),
     upload.single("offerLetter"),
     studentController.registerInternship
 );
+
+
+// ============================================================
+// TRACK INTERNSHIP STATUS
+// ============================================================
 
 // Track Internship Status
 router.get(
     "/status/:srn",
     verifyToken,
+    requireRole("Student"),
     studentController.trackStatus
 );
 
@@ -30,48 +39,41 @@ router.get(
 // INTERNSHIP REPORT
 // ============================================================
 
-// 1. Get internship approval + report submission status
+// Get internship approval + report submission status
 router.get(
     "/internship-report",
     verifyToken,
+    requireRole("Student"),
     studentController.getInternshipReportStatus
 );
 
-// 2. Submit internship report PDF
+// Submit internship report PDF
 router.post(
     "/internship-report",
     verifyToken,
+    requireRole("Student"),
     upload.single("report"),
     studentController.submitInternshipReport
 );
 
-// 3. View submitted internship report PDF
+// View submitted internship report PDF
 router.get(
     "/internship-report/file",
     verifyToken,
+    requireRole("Student"),
     studentController.getInternshipReportFile
 );
 
 
 // ============================================================
-// NOC
-// ============================================================
-
-router.post(
-    "/request-noc",
-    verifyToken,
-    studentController.requestNOC
-);
-
-
-// ============================================================
-// PROFILE
+// STUDENT PROFILE
 // ============================================================
 
 // Get Student Profile
 router.get(
     "/profile",
     verifyToken,
+    requireRole("Student"),
     studentController.getProfile
 );
 
@@ -79,6 +81,7 @@ router.get(
 router.put(
     "/profile",
     verifyToken,
+    requireRole("Student"),
     studentController.updateProfile
 );
 

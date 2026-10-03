@@ -1,42 +1,35 @@
 const jwt = require("jsonwebtoken");
 
 exports.verifyToken = (req, res, next) => {
-
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-
-        return res.status(401).json({
-            success: false,
-            message: "Access Denied"
-        });
-
-    }
-
-    const token = authHeader.split(" ")[1];
-    console.log("Token received:", token);
     try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                success: false,
+                message: "Access token required"
+            });
+        }
+
+        const token = authHeader.split(" ")[1];
 
         const decoded = jwt.verify(
             token,
             process.env.JWT_SECRET
         );
-        console.log("Decoded:", decoded);
+
+        // Store authenticated user
+        req.user = decoded;
+
+        // Keep compatibility with existing student controllers
         req.student = decoded;
 
         next();
 
-    }
-
-    catch (err) {
-
+    } catch (error) {
         return res.status(401).json({
-
             success: false,
-            message: "Invalid Token"
-
+            message: "Invalid or expired token"
         });
-
     }
-
 };
