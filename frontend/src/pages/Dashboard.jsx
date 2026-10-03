@@ -224,7 +224,11 @@ const response = await fetch(
           </div>
         </div>
       </div>
+<<<<<<< HEAD
             {/* Internship Report Section */}
+=======
+      {/* Internship Report Section */}
+>>>>>>> c0ef65a (Add internship report (prathibha))
 <div className="mt-12 bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
   <div className="flex items-start gap-4">
 

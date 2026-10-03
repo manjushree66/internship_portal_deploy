@@ -1,148 +1,368 @@
+const Application = require("../models/Application");
 const Faculty = require("../models/Faculty");
-const Internship = require("../models/Internship");
+const { generateApplicationsWorkbook } = require("../utils/excelExport");
 
+// ============================================================
+// GET ALL APPLICATIONS
+// GET /api/admin/applications?status=review&search=ananya&page=1&limit=25
+// ============================================================
+exports.listApplications = async (req, res) => {
+  try {
+    const {
+      status,
+      search,
+      page = 1,
+      limit = 25
+    } = req.query;
 
-// ======================================
-// Get All Faculty
-// ======================================
-exports.getFaculty = async (req, res) => {
+    const pageNumber = Math.max(Number(page), 1);
+    const limitNumber = Math.min(Math.max(Number(limit), 1), 100);
 
-    try {
+    const filter = {};
 
-        const faculty = await Faculty.find().sort({ name: 1 });
-
-        res.json({
-
-            success: true,
-
-            teachers: faculty.map(f => ({
-
-                id: f._id,
-
-                name: f.name,
-
-                email: f.email,
-
-                department: f.department,
-
-                role: f.role || "Regular Faculty"
-
-            }))
-
-        });
-
+    // Filter by verification status
+    if (
+      status &&
+      ["approved", "review", "rejected", "pending"].includes(status)
+    ) {
+      filter["verification.status"] = status;
     }
 
-    catch (err) {
+    // Search by student name, SRN or company
+    if (search && String(search).trim()) {
+      const re = new RegExp(String(search).trim(), "i");
 
-        res.status(500).json({
-
-            success: false,
-
-            message: err.message
-
-        });
-
+      filter.$or = [
+        { studentName: re },
+        { srn: re },
+        { company: re }
+      ];
     }
 
+    const applications = await Application.find(filter)
+      .sort({ createdAt: -1 })
+      .skip((pageNumber - 1) * limitNumber)
+      .limit(limitNumber);
+
+    const total = await Application.countDocuments(filter);
+
+    res.json({
+      success: true,
+      applications,
+      total,
+      page: pageNumber,
+      limit: limitNumber,
+      totalPages: Math.ceil(total / limitNumber)
+    });
+
+  } catch (err) {
+    console.error("Failed to list applications:", err);
+
+    res.status(500).json({
+      success: false,
+      error: "Failed to load applications."
+    });
+  }
 };
 
 
-// ======================================
-// Assign Scrutiny Faculty
-// ======================================
-exports.assignScrutinyFaculty = async (req, res) => {
+// ============================================================
+// GET SINGLE APPLICATION
+// GET /api/admin/applications/:id
+// ============================================================
+exports.getApplication = async (req, res) => {
+  try {
+    const application = await Application.findById(req.params.id);
 
-    try {
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        error: "Application not found."
+      });
+    }
 
-        const faculty = await Faculty.findById(req.params.id);
+    res.json({
+      success: true,
+      application
+    });
 
-        if (!faculty) {
+  } catch (err) {
+    console.error("Failed to get application:", err);
 
-            return res.status(404).json({
+    res.status(500).json({
+      success: false,
+      error: "Failed to load application."
+    });
+  }
+};
 
-                success: false,
 
-                message: "Faculty not found"
+// ============================================================
+// ADMIN OVERRIDE VERIFICATION DECISION
+// PATCH /api/admin/applications/:id/override
+//
+// Body:
+// {
+//   "status": "approved",
+//   "reason": "Verified manually",
+//   "overriddenBy": "admin@pes.edu"
+// }
+// ============================================================
+exports.overrideDecision = async (req, res) => {
+  try {
+    const {
+      status,
+      reason,
+      overriddenBy
+    } = req.body;
 
-            });
+    if (!["approved", "review", "rejected"].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        error: "status must be approved, review, or rejected."
+      });
+    }
 
+    if (!reason || !String(reason).trim()) {
+      return res.status(400).json({
+        success: false,
+        error: "Override reason is required."
+      });
+    }
+
+    const application = await Application.findByIdAndUpdate(
+      req.params.id,
+      {
+        "verification.adminOverride": {
+          status,
+          reason: String(reason).trim(),
+          overriddenBy: overriddenBy || "Admin",
+          overriddenAt: new Date()
         }
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    );
 
-        faculty.role = "Scrutiny Faculty";
-
-        await faculty.save();
-
-        res.json({
-
-            success: true,
-
-            message: "Faculty assigned successfully."
-
-        });
-
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        error: "Application not found."
+      });
     }
 
-    catch (err) {
+    res.json({
+      success: true,
+      message: "Application decision overridden successfully.",
+      application
+    });
 
-        res.status(500).json({
+  } catch (err) {
+    console.error("Failed to override decision:", err);
 
-            success: false,
-
-            message: err.message
-
-        });
-
-    }
-
+    res.status(500).json({
+      success: false,
+      error: "Failed to override application decision."
+    });
+  }
 };
 
 
-// ======================================
-// Student Overview
-// ======================================
+// ============================================================
+// GET ALL FACULTY
+// GET /api/admin/faculty
+// ============================================================
+exports.getFaculty = async (req, res) => {
+  try {
+
+    const faculty = await Faculty
+      .find()
+      .sort({ name: 1 });
+
+    res.json({
+      success: true,
+
+      teachers: faculty.map((f) => ({
+        id: f._id,
+        name: f.name,
+        email: f.email,
+        department: f.department,
+        role: f.role || "Regular Faculty"
+      }))
+    });
+
+  } catch (err) {
+
+    console.error("Failed to get faculty:", err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load faculty."
+    });
+  }
+};
+
+
+// ============================================================
+// ASSIGN SCRUTINY FACULTY
+// PATCH /api/admin/faculty/:id/scrutiny
+// ============================================================
+exports.assignScrutinyFaculty = async (req, res) => {
+  try {
+
+    const faculty = await Faculty.findById(req.params.id);
+
+    if (!faculty) {
+      return res.status(404).json({
+        success: false,
+        message: "Faculty not found."
+      });
+    }
+
+    faculty.role = "Scrutiny Faculty";
+
+    await faculty.save();
+
+    res.json({
+      success: true,
+      message: "Faculty assigned as Scrutiny Faculty successfully.",
+      faculty: {
+        id: faculty._id,
+        name: faculty.name,
+        email: faculty.email,
+        department: faculty.department,
+        role: faculty.role
+      }
+    });
+
+  } catch (err) {
+
+    console.error("Failed to assign scrutiny faculty:", err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to assign scrutiny faculty."
+    });
+  }
+};
+
+
+// ============================================================
+// STUDENT OVERVIEW
+// GET /api/admin/students
+//
+// Uses the NEW Application model instead of the OLD Internship
+// model.
+// ============================================================
 exports.getStudentOverview = async (req, res) => {
+  try {
 
-    try {
+    const applications = await Application
+      .find()
+      .sort({ createdAt: -1 });
 
-        const internships = await Internship.find().sort({ createdAt: -1 });
+    const students = applications.map((application) => {
 
-        const students = internships.map(i => ({
+      // Admin override takes priority over automated status
+      const finalStatus =
+        application.verification?.adminOverride?.status ||
+        application.verification?.status ||
+        "pending";
 
-            id: i._id,
+      return {
+        id: application._id,
 
-            name: i.student_name,
+        name: application.studentName || "-",
 
-            srn: i.srn,
+        email: application.studentEmail || "-",
 
-            managerScore: i.total_marks || 0,
+        srn: application.srn || "-",
 
-            grade: i.grade || "-",
+        semester: application.semester || "-",
 
-            credits: i.credits || "-"
+        company: application.company || "-",
 
-        }));
+        role: application.role || "-",
 
-        res.json({
+        startDate: application.startDate || null,
 
-            success: true,
+        endDate: application.endDate || null,
 
-            students
+        internshipNature:
+          application.internshipNature || "-",
 
-        });
+        category:
+          application.category || "-",
 
-    }
+        status: finalStatus,
 
-    catch (err) {
+        hardFails:
+          application.verification?.hardFails || [],
 
-        res.status(500).json({
+        softFlags:
+          application.verification?.softFlags || [],
 
-            success: false,
+        aiNotes:
+          application.verification?.aiNotes || "",
 
-            message: err.message
+        createdAt: application.createdAt
+      };
+    });
 
-        });
+    res.json({
+      success: true,
+      students
+    });
 
-    }
+  } catch (err) {
 
+    console.error("Failed to get student overview:", err);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to load student overview."
+    });
+  }
+};
+
+
+// ============================================================
+// EXPORT APPLICATIONS TO EXCEL
+// GET /api/admin/applications/export
+// ============================================================
+exports.exportApplications = async (req, res) => {
+  try {
+
+    const applications = await Application
+      .find()
+      .sort({ createdAt: -1 });
+
+    const workbook =
+      await generateApplicationsWorkbook(applications);
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=internship_verification_log.xlsx"
+    );
+
+    await workbook.xlsx.write(res);
+
+    res.end();
+
+  } catch (err) {
+
+    console.error("Excel export failed:", err);
+
+    res.status(500).json({
+      success: false,
+      error: "Failed to generate the Excel export."
+    });
+  }
 };

@@ -1,180 +1,249 @@
 const mongoose = require("mongoose");
 
-const internshipSchema = new mongoose.Schema({
+const internshipSchema = new mongoose.Schema(
+    {
 
-    // -------------------------
-    // Student Details
-    // -------------------------
+        // =====================================================
+        // STUDENT INFORMATION
+        // =====================================================
 
-    srn: {
-        type: String,
-        required: true,
-        unique: true
+        srn: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true
+        },
+
+        student_name: {
+            type: String,
+            trim: true
+        },
+
+        student_email: {
+            type: String,
+            trim: true
+        },
+
+
+        // =====================================================
+        // INTERNSHIP INFORMATION
+        // =====================================================
+
+        company: {
+            type: String,
+            required: true,
+            trim: true
+        },
+
+        role: {
+            type: String,
+            trim: true
+        },
+
+        campus_type: {
+            type: String,
+            enum: [
+                "On Campus",
+                "Off Campus"
+            ]
+        },
+
+        internship_nature: {
+            type: String,
+            trim: true
+        },
+
+        start_date: {
+            type: Date
+        },
+
+        end_date: {
+            type: Date
+        },
+
+
+        // =====================================================
+        // MENTOR / MANAGER INFORMATION
+        // =====================================================
+
+        mentor_name: {
+            type: String,
+            trim: true
+        },
+
+        mentor_email: {
+            type: String,
+            trim: true
+        },
+
+        manager_name: {
+            type: String,
+            trim: true
+        },
+
+        manager_email: {
+            type: String,
+            trim: true
+        },
+
+
+        // =====================================================
+        // OFFER LETTER
+        // =====================================================
+
+        offer_letter: {
+            type: String,
+            default: null
+        },
+
+
+        // =====================================================
+        // COMPANY EVALUATION
+        // =====================================================
+
+        company_evaluation: {
+            type: Boolean,
+            default: false
+        },
+
+        evaluation_mode: {
+            type: String,
+            enum: [
+                "Company",
+                "PES"
+            ],
+            default: "PES"
+        },
+
+
+        // =====================================================
+        // INTERNSHIP APPROVAL STATUS
+        // =====================================================
+
+        status: {
+            type: String,
+            default: "Pending Approval"
+        },
+
+
+        // =====================================================
+        // WORKFLOW STAGE
+        // =====================================================
+
+        current_stage: {
+            type: String,
+            default: "Submitted"
+        },
+
+
+        // =====================================================
+        // SCRUTINY
+        // =====================================================
+
+        scrutiny_remarks: {
+            type: String,
+            default: ""
+        },
+
+
+        // =====================================================
+        // FACULTY APPROVAL
+        // =====================================================
+
+        faculty_remarks: {
+            type: String,
+            default: ""
+        },
+
+
+        // =====================================================
+        // EVALUATION
+        // =====================================================
+
+        grade: {
+            type: String,
+            default: null
+        },
+
+        credits: {
+            type: Number,
+            default: null
+        },
+
+
+        // =====================================================
+        // INTERNSHIP REPORT
+        // =====================================================
+        //
+        // The student's final internship report PDF
+        // is stored directly inside MongoDB as a Buffer.
+        //
+
+        report: {
+
+            // Original PDF filename
+            fileName: {
+                type: String,
+                default: null
+            },
+
+            // Example:
+            // application/pdf
+            contentType: {
+                type: String,
+                default: null
+            },
+
+            // Actual PDF data
+            data: {
+                type: Buffer,
+                default: null
+            },
+
+            // Date and time when student submitted report
+            submittedAt: {
+                type: Date,
+                default: null
+            },
+
+            // Report submission status
+            status: {
+                type: String,
+
+                enum: [
+                    "Not Submitted",
+                    "Submitted"
+                ],
+
+                default: "Not Submitted"
+            }
+
+        },
+
+
+        // =====================================================
+        // NOC
+        // =====================================================
+
+        noc_requested: {
+            type: Boolean,
+            default: false
+        }
+
     },
 
-    student_name: String,
-
-    student_email: String,
-
-    semester: String,
-
-
-
-    // -------------------------
-    // Company Details
-    // -------------------------
-
-    campus_type: String,
-
-    internship_type: String,
-
-    company: String,
-
-    company_website: String,
-
-    internship_domain: String,
-
-    location: String,
-
-
-
-    // -------------------------
-    // Internship Details
-    // -------------------------
-
-    role: String,
-
-    start_date: String,
-
-    end_date: String,
-
-    paid: Boolean,
-
-    stipend: String,
-
-
-
-    // -------------------------
-    // Project Details
-    // -------------------------
-
-    project_description: String,
-
-    tech_stack: String,
-
-
-
-    // -------------------------
-    // Offer Letter
-    // -------------------------
-
-    offer_letter: String,
-
-
-stipend_type: String,
-
-offer_letter_url: String,
-internship_nature: String,
-duration: Number,
-    // -------------------------
-    // Evaluation
-    // -------------------------
-
-    company_evaluation: Boolean,
-
-    evaluation_mode: {
-        type: String,
-        enum: ["Company", "PES"],
-        default: "PES"
-    },
-
-
-
-    // -------------------------
-    // Manager Details
-    // -------------------------
-
-    manager_name: String,
-
-    manager_designation: String,
-
-    manager_email: String,
-
-    manager_contact: String,
-
-
-// -------------------------
-// Faculty Assignment
-// -------------------------
-
-assigned_faculty: {
-    type: String,
-    default: null
-},
-    // -------------------------
-    // Workflow
-    // -------------------------
-
-    status: {
-
-        type: String,
-
-        default: "Submitted"
-
-    },
-
-    current_stage: {
-
-        type: String,
-
-        default: "Scrutiny Verification"
-
-    },
-
-
-
-    // -------------------------
-    // Remarks
-    // -------------------------
-
-    scrutiny_remarks: String,
-
-    faculty_remarks: String,
-
-
-
-    // -------------------------
-    // Evaluation Result
-    // -------------------------
-
-    total_marks: Number,
-
-    grade: String,
-
-    credits: Number,
-
-
-
-    // -------------------------
-    // Student Report
-    // -------------------------
-
-    report: String,
-
-
-
-}, {
-
-    timestamps: true
-
-});
+    {
+        timestamps: true
+    }
+);
+
+
+// ============================================================
+// EXPORT MODEL
+// ============================================================
 
 module.exports = mongoose.model(
-
     "Internship",
-
     internshipSchema,
-
     "internship_records"
-
 );

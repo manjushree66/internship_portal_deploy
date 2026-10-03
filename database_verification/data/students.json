@@ -1,0 +1,27 @@
+[
+    {
+        "student_id": "PES001",
+        "student_name": "Rahul Sharma",
+        "company_name": "ABC Technologies"
+    },
+    {
+        "student_id": "PES002",
+        "student_name": "Ananya Reddy",
+        "company_name": "XYZ Solutions"
+    },
+    {
+        "student_id": "PES003",
+        "student_name": "Kiran Kumar",
+        "company_name": "CloudGen Consultancy Services"
+    },
+    {
+        "student_id": "PES004",
+        "student_name": "Priya Nair",
+        "company_name": "TechNova Systems"
+    },
+    {
+        "student_id": "PES005",
+        "student_name": "Arjun Mehta",
+        "company_name": "DataBridge Solutions"
+    }
+]

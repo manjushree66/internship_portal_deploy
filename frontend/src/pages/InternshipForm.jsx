@@ -33,6 +33,10 @@ export default function InternshipForm() {
     companyWebsite: "", // <-- ADDED: Company Website
     role: "",
     managerLinkedIn: "",
+<<<<<<< HEAD
+=======
+
+>>>>>>> c0ef65a (Add internship report (prathibha))
     managerName: "",
     managerEmail: "",
 
@@ -91,6 +95,7 @@ export default function InternshipForm() {
       formData.append("company", form.company);
       formData.append("company_website", form.companyWebsite); // <-- ADDED
       formData.append("role", form.role);
+      formData.append("manager_linkedin", form.managerLinkedIn);
 
       formData.append("manager_name", form.managerName);
       formData.append("manager_email", form.managerEmail);
@@ -313,6 +318,14 @@ export default function InternshipForm() {
               onChange={handleChange}
               className="border rounded-lg p-3 md:col-span-2"
             />
+            <input
+             type="url"
+            name="managerLinkedIn"
+            placeholder="Manager LinkedIn Profile (https://linkedin.com/in/...)"
+             value={form.managerLinkedIn}
+            onChange={handleChange}
+            className="border rounded-lg p-3 md:col-span-2"
+           />
             <input
               type="text"
               name="mentorName"

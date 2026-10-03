@@ -27,7 +27,11 @@ const Footer = () => {
           </p>
         </div>
 
+<<<<<<< HEAD
   
+=======
+        
+>>>>>>> c0ef65a (Add internship report (prathibha))
 
         {/* Contact */}
         <div className="footer-section">
@@ -57,7 +61,7 @@ const Footer = () => {
 
             <a href="#">
               <FaLinkedin />
-            </a>
+            </a> 
           </div>
         </div>
 
