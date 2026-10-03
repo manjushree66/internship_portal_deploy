@@ -33,10 +33,6 @@ export default function InternshipForm() {
     companyWebsite: "", // <-- ADDED: Company Website
     role: "",
     managerLinkedIn: "",
-<<<<<<< HEAD
-=======
-
->>>>>>> c0ef65a (Add internship report (prathibha))
     managerName: "",
     managerEmail: "",
 
