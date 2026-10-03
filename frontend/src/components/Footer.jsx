@@ -5,7 +5,6 @@ import {
   FaEnvelope,
   FaPhoneAlt,
   FaMapMarkerAlt,
-  FaGithub,
   FaLinkedin,
 } from "react-icons/fa";
 
@@ -14,24 +13,18 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-
       <div className="footer-container">
 
         {/* Left Section */}
         <div className="footer-section">
           <h2>Internship Approval</h2>
+
           <p>
             A centralized portal for students and coordinators to manage
             internship applications, approvals, evaluations, and progress
             efficiently.
           </p>
         </div>
-
-<<<<<<< HEAD
-  
-=======
-        
->>>>>>> c0ef65a (Add internship report (prathibha))
 
         {/* Contact */}
         <div className="footer-section">
@@ -58,10 +51,9 @@ const Footer = () => {
           <h3>Connect</h3>
 
           <div className="social-icons">
-
-            <a href="#">
+            <a href="#" aria-label="LinkedIn">
               <FaLinkedin />
-            </a> 
+            </a>
           </div>
         </div>
 
@@ -72,7 +64,6 @@ const Footer = () => {
       <div className="footer-bottom">
         © {year} Internship Approval Portal | PES University
       </div>
-
     </footer>
   );
 };
