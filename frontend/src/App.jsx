@@ -10,7 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import InternshipForm from "./pages/InternshipForm";
 import InternshipStatus from "./pages/InternshipStatus";
-
+import InternshipReport from "./pages/InternshipReport";
 
 import ChatbotPage from "./pages/ChatbotPage";
 import FacultyDashboard from "./pages/FacultyDashboard";
